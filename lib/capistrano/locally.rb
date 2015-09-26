@@ -11,13 +11,24 @@ module Capistrano
   module DSL
     alias original_on on
 
-    def on(_hosts, options={}, &block)
-      localhosts, hosts = _hosts.partition { |h| h.hostname == 'localhost' }
+    def on(hosts, options={}, &block)
+      localhosts, remotehosts = hosts.partition { |h| h.hostname.to_s == 'localhost' }
       localhost = Configuration.env.filter(localhosts).first
 
-      run_locally(&block) unless localhost.nil?
+      unless localhost.nil?
+        if dry_run?
+          SSHKit::Backend::Printer
+        else
+          SSHKit::Backend::Local
+        end.new(localhost, &block).run
+      end
 
-      original_on(hosts, options={}, &block)
+      original_on(remotehosts, options={}, &block)
+    end
+
+    private
+    def dry_run?
+      fetch(:sshkit_backend) == SSHKit::Backend::Printer
     end
   end
 end

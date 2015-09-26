@@ -1,8 +1,13 @@
 # Capistrano::Locally
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capistrano/locally`. To experiment with that code, run `bin/console` for an interactive prompt.
+This gem is a Capistrano plugin to simplify "localhost" deployment.
 
-TODO: Delete this and the text above, and describe your gem
+Capistrano can deploy the source to any hosts including localhost via SSH (`SSHKit::Backend::Netssh`).
+But when limiting to some simple case that deployment to localhost, SSH isn't sometimes necessary.
+
+A `capistrano-locally` deploys without SSH only when a target host named "localhost"
+
+So, you don't need to write SSH user and configs on `server 'localhost'`.
 
 ## Installation
 
@@ -22,7 +27,20 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Require in `Capfile`:
+
+    require 'capistrano/locally'
+
+
+### Example
+
+`config/deploy/staging_and_local.rb`
+
+    # typically server config is:
+    server 'my.remotehost.com', roles: w%{app web}, user: 'deploy', key: '/path/to/key.pem'
+    # localhost config is:
+    server 'localhost', roles: w%{app web} # no need to set SSH configs.
+
 
 ## Development
 
