@@ -37,9 +37,9 @@ Require in `Capfile`:
 `config/deploy/staging_and_local.rb`
 
     # typically server config is:
-    server 'my.remotehost.com', roles: w%{app web}, user: 'deploy', key: '/path/to/key.pem'
+    server 'my.remotehost.com', roles: %w{app web}, user: 'deploy', key: '/path/to/key.pem'
     # localhost config is:
-    server 'localhost', roles: w%{app web} # no need to set SSH configs.
+    server 'localhost', roles: %w{app web} # no need to set SSH configs.
 
 
 ## Development
