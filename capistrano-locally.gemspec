@@ -19,6 +19,7 @@ But when limiting to some simple case that deployment to localhost, SSH isn't so
 A `capistrano-locally` deploys without SSH only when a target host named "localhost".
   EOS
   spec.homepage      = "https://github.com/komazarari/capistrano-locally"
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
