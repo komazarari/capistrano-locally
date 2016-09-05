@@ -24,7 +24,7 @@ module Capistrano
         end.new(localhost, &block).run
       end
 
-      original_on(remotehosts, options={}, &block)
+      original_on(remotehosts, options, &block)
     end
 
     private
