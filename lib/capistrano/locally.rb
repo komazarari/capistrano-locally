@@ -13,7 +13,7 @@ module Capistrano
 
     def on(hosts, options={}, &block)
       return unless hosts
-      localhosts, remotehosts = hosts.partition { |h| h.hostname.to_s == 'localhost' }
+      localhosts, remotehosts = Array(hosts).partition { |h| h.hostname.to_s == 'localhost' }
       localhost = Configuration.env.filter(localhosts).first
 
       unless localhost.nil?
