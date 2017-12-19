@@ -14,7 +14,7 @@ So, you don't need to write SSH user and configs on `server 'localhost'`.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capistrano-locally'
+gem 'capistrano-locally', require: false
 ```
 
 And then execute:
