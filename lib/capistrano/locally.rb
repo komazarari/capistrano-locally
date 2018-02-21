@@ -17,11 +17,18 @@ module Capistrano
       localhost = Configuration.env.filter(localhosts).first
 
       unless localhost.nil?
-        if dry_run?
-          SSHKit::Backend::Printer
+        klass = if dry_run?
+                  SSHKit::Backend::Printer
+                else
+                  SSHKit::Backend::Local
+                end
+        if defined? Bundler
+          Bundler.with_clean_env do
+            klass.new(localhost, &block).run
+          end
         else
-          SSHKit::Backend::Local
-        end.new(localhost, &block).run
+          klass.new(localhost, &block).run
+        end
       end
 
       original_on(remotehosts, options, &block)
