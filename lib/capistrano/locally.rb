@@ -35,6 +35,7 @@ module Capistrano
     end
 
     private
+
     def dry_run?
       fetch(:sshkit_backend) == SSHKit::Backend::Printer
     end
