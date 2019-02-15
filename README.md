@@ -1,4 +1,5 @@
 # Capistrano::Locally
+[![CircleCI](https://circleci.com/gh/komazarari/capistrano-locally.svg?style=svg)](https://circleci.com/gh/komazarari/capistrano-locally)
 
 This gem is a Capistrano plugin to simplify "localhost" deployment.
 
