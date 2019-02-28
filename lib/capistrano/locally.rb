@@ -22,7 +22,7 @@ module Capistrano
                 else
                   SSHKit::Backend::Local
                 end
-        if defined? Bundler
+        if (defined? Bundler) && fetch(:run_locally_with_clean_env, true)
           Bundler.with_clean_env do
             klass.new(localhost, &block).run
           end
