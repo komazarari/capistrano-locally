@@ -43,9 +43,10 @@ Require in `Capfile`:
     server 'localhost', roles: %w{app web} # no need to set SSH configs.
 
 ### Options
-**`:run_locally_with_clean_env`** (default: `true`)
+**`:run_locally_with_unbundled_env`** (default: `true`)
 
-When using bundler, commands are executed in `Bundler.with_clean_env` by default so as not to affect the executable ruby scripts. To explicitly inherit environment variables, set this `false`.
+Previous name is **`run_locally_with_clean_env`**.
+When using bundler, commands are executed in `Bundler.with_unbundled_env` by default so as not to affect the executable ruby scripts. To explicitly inherit environment variables, set this `false`.
 
 ## Development
 
