@@ -22,8 +22,9 @@ module Capistrano
                 else
                   SSHKit::Backend::Local
                 end
-        if (defined? Bundler) && fetch(:run_locally_with_clean_env, true)
-          Bundler.with_clean_env do
+
+        if (defined? Bundler) && fetch_setting_related_bundler_with_unbundled_env
+          Bundler.with_unbundled_env do
             klass.new(localhost, &block).run
           end
         else
@@ -38,6 +39,26 @@ module Capistrano
 
     def dry_run?
       fetch(:sshkit_backend) == SSHKit::Backend::Printer
+    end
+
+    def fetch_setting_related_bundler_with_unbundled_env
+      value = fetch(:run_locally_with_unbundled_env)
+      value = fetch_run_locally_with_clean_env if use.nil?
+      value = true if use.nil?
+
+      value
+    end
+
+    def fetch_run_locally_with_clean_env
+      value = fetch(:run_locally_with_clean_env)
+
+      unless value.nil?
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :run_locally_with_clean_env` has been deprecated in favor of `set :run_locally_with_unbundled_env`.
+MESSAGE
+      end
+
+      value
     end
   end
 end
