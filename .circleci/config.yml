@@ -1,64 +1,37 @@
-# Ruby CircleCI 2.0 configuration file
+# Ruby CircleCI 2.1 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.1 # Use 2.1 to enable using orbs and other features.
+
+# Declare the orbs that we'll use in our config.
+# read more about orbs: https://circleci.com/docs/2.0/using-orbs/
+orbs:
+  ruby: circleci/ruby@1.1.4
+
 jobs:
-  build:
+  test:
+    parameters:
+      ruby-version:
+        type: string
+      bundler-version:
+        type: string
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.4.1-node-browsers
-      - image: circleci/ruby:2.5.3-node-browsers
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
+      - image: cimg/ruby:<< parameters.ruby-version >>
     steps:
       - checkout
+      - ruby/install-deps:
+          bundler-version: << parameters.bundler-version >>
+          with-cache: true
+      - ruby/rspec-test
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run:
-          name: install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
-
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
-      # # Database setup
-      # - run: bundle exec rake db:create
-      # - run: bundle exec rake db:schema:load
-
-      # run tests!
-      - run:
-          name: run tests
-          command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
-
-            bundle exec rspec \
-              --format progress \
-              --format RspecJunitFormatter \
-              --out /tmp/test-results/rspec.xml \
-              --format progress \
-              $TEST_FILES
-
-      # collect reports
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+workflows:
+  build_and_test:
+    jobs:
+      - test:
+          # matrix jobs https://circleci.com/blog/circleci-matrix-jobs/
+          matrix:
+            parameters:
+              ruby-version: ["2.5", "2.7"]
+              bundler-version: ["1.17.3", "2.2.3"]
