@@ -23,7 +23,7 @@ jobs:
       - checkout
       - ruby/install-deps:
           bundler-version: << parameters.bundler-version >>
-          with-cache: true
+          with-cache: false
       - ruby/rspec-test
 
 workflows:
