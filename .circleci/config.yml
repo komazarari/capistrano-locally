@@ -21,9 +21,14 @@ jobs:
       - image: cimg/ruby:<< parameters.ruby-version >>
     steps:
       - checkout
-      - ruby/install-deps:
-          bundler-version: << parameters.bundler-version >>
-          with-cache: false
+      - run:
+          command: |
+            gem install bundler:<< parameters.bundler-version >>
+            bundle config set path ./vendor/bundle
+            bundle _<< parameters.bundler-version >>_ install
+      # - ruby/install-deps:
+      #     bundler-version: << parameters.bundler-version >>
+      #     with-cache: false
       - ruby/rspec-test
 
 workflows:
