@@ -23,7 +23,7 @@ module Capistrano
                   SSHKit::Backend::Local
                 end
 
-        if (defined? Bundler) && fetch_setting_related_bundler_with_unbundled_env
+        if (defined? Bundler) && with_unbundled_env?
           Bundler.with_unbundled_env do
             klass.new(localhost, &block).run
           end
@@ -35,6 +35,10 @@ module Capistrano
       original_on(remotehosts, options, &block)
     end
 
+    def with_unbundled_env?
+      fetch_setting_related_bundler_with_unbundled_env
+    end
+
     private
 
     def dry_run?
@@ -43,8 +47,8 @@ module Capistrano
 
     def fetch_setting_related_bundler_with_unbundled_env
       value = fetch(:run_locally_with_unbundled_env)
-      value = fetch_run_locally_with_clean_env if use.nil?
-      value = true if use.nil?
+      value = fetch_run_locally_with_clean_env if value.nil?
+      value = true if value.nil?
 
       value
     end
