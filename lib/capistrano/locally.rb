@@ -24,7 +24,11 @@ module Capistrano
                 end
 
         if (defined? Bundler) && with_unbundled_env?
-          Bundler.with_unbundled_env do
+          if Bundler.respond_to?(:with_unbundled_env)
+            Bundler.method(:with_unbundled_env)
+          else
+            Bundler.method(:with_clean_env)
+          end.call do
             klass.new(localhost, &block).run
           end
         else
