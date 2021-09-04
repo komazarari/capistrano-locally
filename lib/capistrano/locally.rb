@@ -24,7 +24,11 @@ module Capistrano
                 end
 
         if (defined? Bundler) && with_unbundled_env?
-          Bundler.with_unbundled_env do
+          if Bundler.respond_to?(:with_unbundled_env)
+            Bundler.method(:with_unbundled_env)
+          else
+            Bundler.method(:with_clean_env)
+          end.call do
             klass.new(localhost, &block).run
           end
         else
@@ -36,7 +40,9 @@ module Capistrano
     end
 
     def with_unbundled_env?
-      fetch_setting_related_bundler_with_unbundled_env
+      [deprecated_with_unbundled_env?, fetch(:run_locally_with_unbundled_env, true)].find do |val|
+        !val.nil?
+      end
     end
 
     private
@@ -45,24 +51,13 @@ module Capistrano
       fetch(:sshkit_backend) == SSHKit::Backend::Printer
     end
 
-    def fetch_setting_related_bundler_with_unbundled_env
-      value = fetch(:run_locally_with_unbundled_env)
-      value = fetch_run_locally_with_clean_env if value.nil?
-      value = true if value.nil?
-
-      value
-    end
-
-    def fetch_run_locally_with_clean_env
-      value = fetch(:run_locally_with_clean_env)
-
-      unless value.nil?
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :run_locally_with_clean_env` has been deprecated in favor of `set :run_locally_with_unbundled_env`.
-MESSAGE
+    def deprecated_with_unbundled_env?
+      fetch(:run_locally_with_clean_env).tap do |val|
+        $stderr.puts(<<~MESSAGE) unless val.nil?
+          [Deprecation Notice] `set :run_locally_with_clean_env` has been deprecated \
+          in favor of `set :run_locally_with_unbundled_env`.
+        MESSAGE
       end
-
-      value
     end
   end
 end
