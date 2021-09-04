@@ -47,6 +47,29 @@ describe Capistrano::Locally do
         expect(dsl.with_unbundled_env?).to be_truthy
       end
     end
+
+    context 'with the :run_locally_with_unbundled_env is set to true' do
+      it 'returns truthy' do
+        dsl.set(:run_locally_with_unbundled_env, true)
+        expect(dsl.with_unbundled_env?).to be_truthy
+        dsl.set(:run_locally_with_unbundled_env, nil)
+      end
+    end
+    context 'with the old key :run_locally_with_clean_env is set to true' do
+      around do |example|
+        dsl.set(:run_locally_with_clean_env, true)
+        example.run
+        dsl.set(:run_locally_with_clean_env, nil)
+      end
+      it 'returns truthy' do
+        expect(dsl.with_unbundled_env?).to be_truthy
+      end
+      it 'shows a Deprecation message' do
+        expect { dsl.with_unbundled_env? }.to output(/\[Deprecation Notice\]/).to_stderr
+      end
+    end
+
+
     context 'with the :run_locally_with_unbundled_env is set to false' do
       it 'returns falsy' do
         dsl.set(:run_locally_with_unbundled_env, false)
