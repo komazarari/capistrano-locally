@@ -1,12 +1,19 @@
 # Changelog
 
-## [Unreleased](https://github.com/komazarari/capistrano-locally/tree/HEAD)
+## [v0.3.0](https://github.com/komazarari/capistrano-locally/tree/v0.3.0) (2021-09-04)
 
-[Full Changelog](https://github.com/komazarari/capistrano-locally/compare/v0.2.7...HEAD)
+[Full Changelog](https://github.com/komazarari/capistrano-locally/compare/v0.2.7...v0.3.0)
 
 **Closed issues:**
 
 - Gem installs many of its files as world writable [\#14](https://github.com/komazarari/capistrano-locally/issues/14)
+
+**Merged pull requests:**
+
+- Add more specs / previous version compatibility [\#19](https://github.com/komazarari/capistrano-locally/pull/19) ([komazarari](https://github.com/komazarari))
+- Add specs tor unbundled\_env [\#18](https://github.com/komazarari/capistrano-locally/pull/18) ([komazarari](https://github.com/komazarari))
+- Update circleci/config.yml to use orbs and matrix-test [\#17](https://github.com/komazarari/capistrano-locally/pull/17) ([komazarari](https://github.com/komazarari))
+- use `Bundler.with_unbundled_env` instead of `Bundler.with_clean_env` [\#16](https://github.com/komazarari/capistrano-locally/pull/16) ([blueberrystream](https://github.com/blueberrystream))
 
 ## [v0.2.7](https://github.com/komazarari/capistrano-locally/tree/v0.2.7) (2021-01-22)
 
